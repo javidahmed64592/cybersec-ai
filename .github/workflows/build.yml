@@ -94,8 +94,7 @@ jobs:
           cd cybersec_ai
           ./install_cybersec_ai.sh
 
-          echo "cybersec_ai/"
-          ls -la
+          tree .
 
           if [ -f "install_cybersec_ai.sh" ]; then
             echo "Installer script not removed"
