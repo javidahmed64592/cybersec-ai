@@ -56,10 +56,10 @@ jobs:
           mv $WHEEL_FILE "release/${WHEEL_FILE}"
           chmod +x release/install_cybersec_ai.sh
 
+          cp config.json release/
           mv release ${PACKAGE_NAME}
 
-          echo "${PACKAGE_NAME}/"
-          ls -l ${PACKAGE_NAME}/
+          tree ${PACKAGE_NAME}/
       - name: Create release tarball
         run: |
           tar -czf cybersec_ai.tar.gz cybersec_ai
