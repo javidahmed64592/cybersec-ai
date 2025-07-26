@@ -43,9 +43,10 @@ cat > "${UNINSTALL_PATH}" << EOF
 set -eu
 
 rm -rf ${WD}/${VENV_NAME}
+rm -rf ${LOGS_DIR}
+rm -f ${CONFIG_PATH}
 rm -f ${EXE_PATH}
 rm -f ${README_PATH}
-rm -rf ${LOGS_DIR}
 rm -- "\$0"
 EOF
 chmod +x "${UNINSTALL_PATH}"

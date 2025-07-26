@@ -1,6 +1,6 @@
 """Unit tests for the example.main module."""
 
-# from cybersec_ai.main import example_function
+# from cybersec_ai.main import main
 
 
 def test_example_function() -> None:
