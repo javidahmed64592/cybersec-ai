@@ -76,7 +76,7 @@ jobs:
       - name: Check version consistency
         run: |
           echo "Checking if versions in __init__.py, pyproject.toml, and uv.lock match..."
-          PACKAGE_NAME="example"
+          PACKAGE_NAME="cybersec_ai"
           INIT_VERSION=$(uv run python -c "import ${PACKAGE_NAME}; print(${PACKAGE_NAME}.__version__)")
           TOML_VERSION=$(uv run python -c "import tomli; print(tomli.load(open('pyproject.toml', 'rb'))['project']['version'])")
           LOCK_VERSION=$(uv run python -c "import tomli; lock_data = tomli.load(open('uv.lock', 'rb')); pkg = next((p for p in lock_data['package'] if p['name'] == '${PACKAGE_NAME/_/-}'), None); print(pkg['version'] if pkg else 'not found')")

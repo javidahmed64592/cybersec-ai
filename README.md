@@ -24,7 +24,7 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 ```
 
 ## Installing Dependencies
-Install the required dependencies using `pip`:
+Install the required dependencies using `uv`:
 
     uv sync
 
