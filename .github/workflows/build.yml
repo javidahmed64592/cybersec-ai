@@ -59,7 +59,7 @@ jobs:
           cp config.json release/
           mv release ${PACKAGE_NAME}
 
-          tree ${PACKAGE_NAME}/
+          tree ${PACKAGE_NAME}/ --dirsfirst -C -F
       - name: Create release tarball
         run: |
           tar -czf cybersec_ai.tar.gz cybersec_ai
@@ -94,7 +94,8 @@ jobs:
           cd cybersec_ai
           ./install_cybersec_ai.sh
 
-          tree .
+          echo "cybersec_ai/"
+          tree --dirsfirst -C -F
 
           if [ -f "install_cybersec_ai.sh" ]; then
             echo "Installer script not removed"
