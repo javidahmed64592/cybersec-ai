@@ -35,7 +35,7 @@ for EXE_NAME in "${EXE_NAMES[@]}"; do
     cat > "${WD}/${EXE_NAME}" << EOF
 #!/bin/bash
 export CYBERSEC_AI_ROOT_DIR=${WD}
-${BIN_DIR}/${EXE_NAME}
+${BIN_DIR}/${EXE_NAME} "\$@"
 EOF
     chmod +x "${WD}/${EXE_NAME}"
 done
@@ -54,7 +54,6 @@ for EXE_NAME in "${EXE_NAMES[@]}"; do
         rm -f "${WD}/${EXE_NAME}"
     fi
 done
-EOF
 
 rm -- "\$0"
 EOF
