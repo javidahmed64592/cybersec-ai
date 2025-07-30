@@ -1,17 +1,23 @@
 """Example main module."""
 
+import logging
 import subprocess
 import sys
-from typing import Callable
+from collections.abc import Callable
 
 import ollama
 
+logging.basicConfig(
+    format="[%(asctime)s] %(levelname)s in %(module)s: %(message)s", datefmt="%d/%m/%Y | %H:%M:%S", level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
-class SecurityTool:
-    """Class-based decorator for creating security tool functions."""
+
+class CommandLineTool:
+    """Class-based decorator for creating command line tool functions."""
 
     def __init__(self, command: str, default_options: list[str] | None = None, timeout: int = 30) -> None:
-        """Initialize the security tool decorator."""
+        """Initialize the command line tool decorator."""
         self.command = command
         self.default_options = default_options or []
         self.timeout = timeout
@@ -21,12 +27,9 @@ class SecurityTool:
 
         def wrapper(*args: list[str], **kwargs: dict[str, str]) -> str:
             """Execute the command with provided options."""
-            # Build command
             command = [self.command, *self.default_options]
 
-            # Get additional arguments from function
-            additional_args = func(*args, **kwargs)
-            if additional_args:
+            if additional_args := func(*args, **kwargs):
                 command.extend(additional_args if isinstance(additional_args, list) else [additional_args])
 
             # You could add timeout handling here
@@ -38,9 +41,29 @@ class SecurityTool:
         return wrapper
 
 
-@SecurityTool("nmap")
+@CommandLineTool("nmap")
 def run_nmap(target: str, options: list[str] | None = None) -> list[str]:
     """Run nmap with the specified target and options."""
+    args = []
+    if options:
+        args.extend(options)
+    args.append(target)
+    return args
+
+
+@CommandLineTool("nikto")
+def run_nikto(target: str, options: list[str] | None = None) -> list[str]:
+    """Run nikto with the specified target and options."""
+    args = []
+    if options:
+        args.extend(options)
+    args.append(target)
+    return args
+
+
+@CommandLineTool("dirb")
+def run_dirb(target: str, options: list[str] | None = None) -> list[str]:
+    """Run dirb with the specified target and options."""
     args = []
     if options:
         args.extend(options)
@@ -61,17 +84,39 @@ def scan_network() -> list[str]:
         msg = "Target must be specified as a command line argument."
         raise ValueError(msg)
 
+    logger.info("Scanning target: %s", target)
+
+    # Run nmap scan with version detection and all ports
+    logger.info("Running nmap scan...")
     nmap_output = run_nmap(target, ["-sV", "-p-"])
+
+    # Run nikto scan for web vulnerabilities
+    logger.info("Running nikto scan...")
+    nikto_output = run_nikto(target, ["-h", target])
+
+    # Run dirb scan for directory brute-forcing
+    logger.info("Running dirb scan...")
+    dirb_output = run_dirb(f"http://{target}")
+
     prompt = f"""
     You're a cybersecurity expert. Analyze the following scan results:
-    NMAP Output:
+
+    nmap Output:
     {nmap_output}
+
+    nikto Output:
+    {nikto_output}
+
+    dirb Output:
+    {dirb_output}
 
     Generate a vulnerability report listing suspicious ports, risky directories, and potential exposures.
     """
+    logger.info("Querying LLM for vulnerability report...")
     report = query_llm(prompt)
-    print("Generated Vulnerability Report:")
-    print(report)
+
+    logger.info("Generated Vulnerability Report:")
+    logger.info(report)
 
 
 def main() -> None:
