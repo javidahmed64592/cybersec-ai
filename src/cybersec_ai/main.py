@@ -101,7 +101,7 @@ def scan_network() -> None:
 
     # Run gobuster scan for directory brute-forcing
     logger.info("Running gobuster scan...")
-    gobuster_output = run_gobuster(f"http://{target}")
+    gobuster_output = run_gobuster(f"http://{target}", ["-w", "/usr/share/wordlists/dirb/common.txt"])
     write_to_txt_file(gobuster_output, "gobuster_scan.txt", output_dir)
 
     prompt_port_analysis = f"""
