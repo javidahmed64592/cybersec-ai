@@ -44,31 +44,22 @@ class CommandLineTool:
 @CommandLineTool("nmap")
 def run_nmap(target: str, options: list[str] | None = None) -> list[str]:
     """Run nmap with the specified target and options."""
-    args = []
-    if options:
-        args.extend(options)
-    args.append(target)
-    return args
+    args = options or []
+    return [*args, target]
 
 
 @CommandLineTool("nikto")
 def run_nikto(target: str, options: list[str] | None = None) -> list[str]:
     """Run nikto with the specified target and options."""
-    args = []
-    if options:
-        args.extend(options)
-    args.append(target)
-    return args
+    args = options or []
+    return [*args, target]
 
 
 @CommandLineTool("dirb")
 def run_dirb(target: str, options: list[str] | None = None) -> list[str]:
     """Run dirb with the specified target and options."""
-    args = []
-    if options:
-        args.extend(options)
-    args.append(target)
-    return args
+    args = options or []
+    return [*args, target]
 
 
 def query_llm(prompt: str) -> str:
