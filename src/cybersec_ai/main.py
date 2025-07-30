@@ -64,11 +64,11 @@ def run_nikto(target: str, options: list[str] | None = None) -> list[str]:
     return [*args, target]
 
 
-@CommandLineTool("dirb")
-def run_dirb(target: str, options: list[str] | None = None) -> list[str]:
-    """Run dirb with the specified target and options."""
+@CommandLineTool("gobuster")
+def run_gobuster(target: str, options: list[str] | None = None) -> list[str]:
+    """Run gobuster for directory brute-forcing with specified target and options."""
     args = options or []
-    return [*args, target]
+    return ["dir", "-u", target, *args]
 
 
 def query_llm(prompt: str) -> str:
@@ -85,7 +85,7 @@ def scan_network() -> None:
         raise ValueError(msg)
 
     root_dir = os.getenv("CYBERSEC_AI_ROOT_DIR", ".")
-    output_dir = os.path.join(root_dir, "output")
+    output_dir = os.path.join(root_dir, "output", f"{target.replace('.', '_')}_scan")
 
     logger.info("Scanning target: %s", target)
 
@@ -99,10 +99,10 @@ def scan_network() -> None:
     nikto_output = run_nikto(target, ["-h", target])
     write_to_txt_file(nikto_output, "nikto_scan.txt", output_dir)
 
-    # Run dirb scan for directory brute-forcing
-    logger.info("Running dirb scan...")
-    dirb_output = run_dirb(f"http://{target}")
-    write_to_txt_file(dirb_output, "dirb_scan.txt", output_dir)
+    # Run gobuster scan for directory brute-forcing
+    logger.info("Running gobuster scan...")
+    gobuster_output = run_gobuster(f"http://{target}")
+    write_to_txt_file(gobuster_output, "gobuster_scan.txt", output_dir)
 
     prompt_port_analysis = f"""
     You're a cybersecurity expert. Analyze the following nmap scan results for the target.
@@ -121,8 +121,8 @@ def scan_network() -> None:
     Nikto Output:
     {nikto_output}
 
-    Dirb Output:
-    {dirb_output}
+    Gobuster Output:
+    {gobuster_output}
     """
 
     logger.info("Querying LLM for port analysis...")
