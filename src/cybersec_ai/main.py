@@ -105,18 +105,26 @@ def scan_network() -> None:
     write_to_txt_file(gobuster_output, "gobuster_scan.txt", output_dir)
 
     prompt_port_analysis = f"""
-    You're a cybersecurity expert. Analyze the following nmap scan results for the target.
-    Identify any suspicious or vulnerable open ports and services.
-    Note common misconfigurations and recommend security hardening steps.
+    You're a skilled penetration tester.
+    Based on the following nmap scan results, identify services and open ports that may be vulnerable to exploitation.
+
+    For each service:
+    - Describe the vulnerability or misconfiguration.
+    - Explain how an attacker might exploit it (e.g., tools, techniques).
+    - Recommend defensive countermeasures.
 
     nmap Output:
     {nmap_output}
     """
 
     prompt_web_app_analysis = f"""
-    You're a cybersecurity expert. Review the web application scan results for the following target.
-    Determine any risky directories or known vulnerabilities.
-    Highlight potential exploitation risks and suggest appropriate mitigations.
+    You're a penetration tester specializing in web application security.
+    Analyze the scan results below and identify directories and known vulnerabilities that an attacker could target.
+
+    For each finding:
+    - Describe its significance and known CVEs (if applicable).
+    - Suggest exploitation paths (e.g., brute-forcing admin panels, parameter tampering, directory traversal).
+    - Recommend fixes or mitigations.
 
     Nikto Output:
     {nikto_output}
@@ -134,10 +142,13 @@ def scan_network() -> None:
     write_to_txt_file(web_app_analysis, "web_app_analysis.txt", output_dir)
 
     prompt_vulnerability_report = f"""
-    You're a cybersecurity expert.
-    Based on the following analyses, create a comprehensive vulnerability report for the target system.
-    Summarize the key findings from both the port and web application assessments, highlight critical risks, and provide
-    actionable recommendations for remediation.
+    You're preparing a penetration testing report based on recent reconnaissance and vulnerability scans.
+
+    Using the following assessments, provide a detailed vulnerability report that includes:
+    - Key exploitable vulnerabilities.
+    - Likely attack chains or entry points.
+    - Exploitation methodology: how each could be leveraged to compromise the system.
+    - Suggested remediations and security enhancements.
 
     Port Analysis:
     {port_analysis}
