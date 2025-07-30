@@ -45,7 +45,7 @@ cat > "${UNINSTALL_PATH}" << EOF
 #!/bin/bash
 set -eu
 
-rm -rf ${WD}/${VENV_NAME}
+rm -rf ${FULL_VENV_PATH}
 rm -rf ${LOGS_DIR}
 rm -f ${CONFIG_PATH} ${README_PATH}
 
