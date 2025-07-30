@@ -50,8 +50,8 @@ rm -rf ${LOGS_DIR}
 rm -f ${CONFIG_PATH} ${README_PATH}
 
 for EXE_NAME in "${EXE_NAMES[@]}"; do
-    if [ -f "${WD}/${EXE_NAME}" ]; then
-        rm -f "${WD}/${EXE_NAME}"
+    if [ -f "${WD}/\${EXE_NAME}" ]; then
+        rm -f "${WD}/\${EXE_NAME}"
     fi
 done
 
