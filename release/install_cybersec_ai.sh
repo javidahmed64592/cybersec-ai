@@ -44,18 +44,7 @@ echo "Creating uninstall script..."
 cat > "${UNINSTALL_PATH}" << EOF
 #!/bin/bash
 set -eu
-
-rm -rf ${FULL_VENV_PATH}
-rm -rf ${LOGS_DIR}
-rm -f ${CONFIG_PATH} ${README_PATH}
-
-for EXE_NAME in "${EXE_NAMES[@]}"; do
-    if [ -f "${WD}/\${EXE_NAME}" ]; then
-        rm -f "${WD}/\${EXE_NAME}"
-    fi
-done
-
-rm -- "\$0"
+rm -rf "${WD}/*"
 EOF
 chmod +x "${UNINSTALL_PATH}"
 
