@@ -152,6 +152,7 @@ def scan_network() -> None:
 
     logger.info("Network scan completed successfully.")
     logger.info("Results saved in output directory: %s", output_dir)
+    logger.info("Final vulnerability report:\n%s", vulnerability_report)
 
 
 def main() -> None:
