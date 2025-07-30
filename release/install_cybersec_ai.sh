@@ -44,7 +44,8 @@ echo "Creating uninstall script..."
 cat > "${UNINSTALL_PATH}" << EOF
 #!/bin/bash
 set -eu
-rm -rf "${WD}/*"
+cd "${WD}"
+rm -rf *
 EOF
 chmod +x "${UNINSTALL_PATH}"
 
