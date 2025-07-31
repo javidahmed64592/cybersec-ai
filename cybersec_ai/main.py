@@ -6,7 +6,7 @@ import sys
 
 import ollama
 
-from cybersec_ai.models.command_line_tool import CommandLineTool
+from cybersec_ai.tools.network import run_gobuster, run_nikto, run_nmap
 
 logging.basicConfig(
     format="[%(asctime)s] %(levelname)s in %(module)s: %(message)s", datefmt="%d/%m/%Y | %H:%M:%S", level=logging.INFO
@@ -20,27 +20,6 @@ def write_to_txt_file(contents: str, filename: str, output_dir: str) -> None:
     filepath = os.path.join(output_dir, filename)
     with open(filepath, "w") as f:
         f.write(contents)
-
-
-@CommandLineTool("nmap")
-def run_nmap(target: str, options: list[str] | None = None) -> list[str]:
-    """Run nmap with the specified target and options."""
-    args = options or []
-    return [*args, target]
-
-
-@CommandLineTool("nikto")
-def run_nikto(target: str, options: list[str] | None = None) -> list[str]:
-    """Run nikto with the specified target and options."""
-    args = options or []
-    return [*args, target]
-
-
-@CommandLineTool("gobuster")
-def run_gobuster(target: str, options: list[str] | None = None) -> list[str]:
-    """Run gobuster for directory brute-forcing with specified target and options."""
-    args = options or []
-    return ["dir", "-u", target, *args]
 
 
 def query_llm(prompt: str) -> str:
