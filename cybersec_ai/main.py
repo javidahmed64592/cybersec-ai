@@ -6,12 +6,14 @@ import sys
 
 import ollama
 
+from cybersec_ai.models.chatbot import Chatbot
 from cybersec_ai.tools.network import run_gobuster, run_nikto, run_nmap
 
 logging.basicConfig(
     format="[%(asctime)s] %(levelname)s in %(module)s: %(message)s", datefmt="%d/%m/%Y | %H:%M:%S", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
+chatbot = Chatbot(model_name="gemma:2b")
 
 
 def write_to_txt_file(contents: str, filename: str, output_dir: str) -> None:
@@ -20,12 +22,6 @@ def write_to_txt_file(contents: str, filename: str, output_dir: str) -> None:
     filepath = os.path.join(output_dir, filename)
     with open(filepath, "w") as f:
         f.write(contents)
-
-
-def query_llm(prompt: str) -> str:
-    """Query the language model with a prompt."""
-    response = ollama.chat(model="gemma:2b", messages=[{"role": "user", "content": prompt}])
-    return response["message"]["content"]
 
 
 def scan_network() -> None:
@@ -85,11 +81,11 @@ def scan_network() -> None:
     """
 
     logger.info("Querying LLM for port analysis...")
-    port_analysis = query_llm(prompt_port_analysis)
+    port_analysis = chatbot.query(prompt_port_analysis)
     write_to_txt_file(port_analysis, "port_analysis.txt", output_dir)
 
     logger.info("Querying LLM for web application analysis...")
-    web_app_analysis = query_llm(prompt_web_app_analysis)
+    web_app_analysis = chatbot.query(prompt_web_app_analysis)
     write_to_txt_file(web_app_analysis, "web_app_analysis.txt", output_dir)
 
     prompt_vulnerability_report = f"""
@@ -109,7 +105,7 @@ def scan_network() -> None:
     """
 
     logger.info("Querying LLM for vulnerability report...")
-    vulnerability_report = query_llm(prompt_vulnerability_report)
+    vulnerability_report = chatbot.query(prompt_vulnerability_report)
     write_to_txt_file(vulnerability_report, "vulnerability_report.txt", output_dir)
 
     logger.info("Network scan completed successfully.")
