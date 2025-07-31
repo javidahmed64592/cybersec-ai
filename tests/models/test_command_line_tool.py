@@ -1,8 +1,7 @@
 """Unit tests for the cybersec_ai.models.command_line_tool module."""
 
 import subprocess
-from collections.abc import Generator
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -27,20 +26,6 @@ def mock_command_line_tool_function(mock_command_line_tool: CommandLineTool) -> 
         return ["--option", "value"]
 
     return mock_function
-
-
-@pytest.fixture
-def mock_shutil_which() -> Generator[MagicMock, None, None]:
-    """Mock shutil.which to simulate command availability."""
-    with patch("shutil.which") as mock_which:
-        yield mock_which
-
-
-@pytest.fixture
-def mock_subprocess_run() -> Generator[MagicMock, None, None]:
-    """Mock subprocess.run to simulate command execution."""
-    with patch("subprocess.run") as mock_run:
-        yield mock_run
 
 
 class TestCommandLineTool:
