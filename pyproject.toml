@@ -84,7 +84,7 @@ exclude = [
 ]
 
 extend-exclude = [
-    "src/**/__init__.py",
+    "__init__.py",
 ]
 
 [tool.ruff.lint]
