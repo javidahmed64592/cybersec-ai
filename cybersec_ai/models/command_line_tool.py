@@ -8,10 +8,9 @@ from collections.abc import Callable
 class CommandLineTool:
     """Class-based decorator for creating command line tool functions."""
 
-    def __init__(self, command: str, default_options: list[str] | None = None, timeout: int = 30) -> None:
+    def __init__(self, command: str, timeout: int = 300) -> None:
         """Initialize the command line tool decorator."""
         self.command = command
-        self.default_options = default_options or []
         self.timeout = timeout
 
     def __call__(self, func: Callable) -> Callable:
@@ -23,14 +22,17 @@ class CommandLineTool:
                 msg = f"Command '{self.command}' not found in PATH."
                 raise FileNotFoundError(msg)
 
-            command = [self.command, *self.default_options]
+            command = [self.command]
 
             if additional_args := func(*args, **kwargs):
                 command.extend(additional_args if isinstance(additional_args, list) else [additional_args])
 
-            # You could add timeout handling here
-            result = subprocess.run(command, check=False, capture_output=True, text=True)
-            return result.stdout
+            try:
+                result = subprocess.run(command, check=False, capture_output=True, text=True, timeout=self.timeout)
+            except subprocess.TimeoutExpired:
+                return f"Command '{self.command}' timed out after {self.timeout} seconds."
+            else:
+                return result.stdout
 
         wrapper.__name__ = func.__name__
         wrapper.__doc__ = func.__doc__
