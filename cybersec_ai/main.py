@@ -8,9 +8,7 @@ from cybersec_ai.models.prompt_factory import PromptFactory
 from cybersec_ai.tools.network import run_gobuster, run_nikto, run_nmap
 from cybersec_ai.utils import get_output_dir, write_to_txt_file
 
-logging.basicConfig(
-    format="[%(asctime)s] %(levelname)s in %(module)s: %(message)s", datefmt="%d/%m/%Y | %H:%M:%S", level=logging.INFO
-)
+logging.basicConfig(format="[*] (%(asctime)s) %(message)s", datefmt="%d/%m/%Y | %H:%M:%S", level=logging.INFO)
 logger = logging.getLogger(__name__)
 chatbot = Chatbot(model_name="gemma:2b")
 
