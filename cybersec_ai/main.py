@@ -27,7 +27,7 @@ def scan_network() -> None:
     """Scan the network for the specified target."""
     target = sys.argv[1]
     if not target:
-        msg = "Target must be specified as a command line argument."
+        msg = "Usage: scan-network <target>"
         raise ValueError(msg)
 
     root_dir = os.getenv("CYBERSEC_AI_ROOT_DIR", ".")
@@ -50,6 +50,8 @@ def scan_network() -> None:
     gobuster_output = run_gobuster(f"http://{target}", ["-w", "/usr/share/wordlists/dirb/common.txt"])
     write_to_txt_file(gobuster_output, "gobuster_scan.txt", output_dir)
 
+    # Query the LLM for port analysis and web application analysis
+    logger.info("Creating prompts for LLM queries...")
     prompts_network_enumeration = PromptFactory.create_network_enumeration_prompt(
         nmap_output=nmap_output, nikto_output=nikto_output, gobuster_output=gobuster_output
     )
@@ -62,6 +64,8 @@ def scan_network() -> None:
     web_app_analysis = chatbot.query(prompts_network_enumeration["web_app_analysis"])
     write_to_txt_file(web_app_analysis, "web_app_analysis.txt", output_dir)
 
+    # Query the LLM for the vulnerability report
+    logger.info("Creating prompt for vulnerability report...")
     prompt_vulnerability_report = PromptFactory.create_vulnerability_report_prompt(
         port_analysis=port_analysis, web_app_analysis=web_app_analysis
     )
@@ -70,6 +74,7 @@ def scan_network() -> None:
     vulnerability_report = chatbot.query(prompt_vulnerability_report)
     write_to_txt_file(vulnerability_report, "vulnerability_report.txt", output_dir)
 
+    # Success messages
     logger.info("Network scan completed successfully.")
     logger.info("Results saved in output directory: %s", output_dir)
     logger.info("Final vulnerability report:\n%s", vulnerability_report)
