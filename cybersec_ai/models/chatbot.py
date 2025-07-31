@@ -13,4 +13,6 @@ class Chatbot:
     def query(self, prompt: str) -> str:
         """Query the chatbot with a prompt."""
         response = ollama.chat(model=self.model_name, messages=[{"role": "user", "content": prompt}])
-        return response["message"]["content"]
+        if reply := response.message.content:
+            return reply
+        return "Failed to get a response from the model."
