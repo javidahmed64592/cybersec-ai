@@ -6,7 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["cybersec_ai "]
+include = ["cybersec_ai"]
+exclude = ["tests"]
 
 [project]
 name = "cybersec-ai"
