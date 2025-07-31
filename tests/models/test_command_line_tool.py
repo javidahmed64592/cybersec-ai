@@ -1,6 +1,7 @@
 """Unit tests for the cybersec_ai.models.command_line_tool module."""
 
 import subprocess
+from collections.abc import Callable
 from unittest.mock import MagicMock
 
 import pytest
@@ -18,11 +19,11 @@ def mock_command_line_tool() -> CommandLineTool:
 
 
 @pytest.fixture
-def mock_command_line_tool_function(mock_command_line_tool: CommandLineTool) -> CommandLineTool:
+def mock_command_line_tool_function(mock_command_line_tool: CommandLineTool) -> Callable:
     """Fixture to create a CommandLineTool function."""
 
     @mock_command_line_tool
-    def mock_function(*args: list[str], **kwargs: dict[str, str]) -> str:
+    def mock_function(*args: list[str], **kwargs: dict[str, str]) -> list[str]:
         return ["--option", "value"]
 
     return mock_function
@@ -38,7 +39,7 @@ class TestCommandLineTool:
 
     def test_call_command_not_found(
         self,
-        mock_command_line_tool_function: CommandLineTool,
+        mock_command_line_tool_function: Callable,
         mock_shutil_which: MagicMock,
         mock_subprocess_run: MagicMock,
     ) -> None:
@@ -52,7 +53,7 @@ class TestCommandLineTool:
 
     def test_call_command_success(
         self,
-        mock_command_line_tool_function: CommandLineTool,
+        mock_command_line_tool_function: Callable,
         mock_shutil_which: MagicMock,
         mock_subprocess_run: MagicMock,
     ) -> None:
@@ -69,7 +70,7 @@ class TestCommandLineTool:
 
     def test_call_command_timeout(
         self,
-        mock_command_line_tool_function: CommandLineTool,
+        mock_command_line_tool_function: Callable,
         mock_shutil_which: MagicMock,
         mock_subprocess_run: MagicMock,
     ) -> None:
@@ -85,7 +86,7 @@ class TestCommandLineTool:
 
     def test_call_command_failure(
         self,
-        mock_command_line_tool_function: CommandLineTool,
+        mock_command_line_tool_function: Callable,
         mock_shutil_which: MagicMock,
         mock_subprocess_run: MagicMock,
     ) -> None:
