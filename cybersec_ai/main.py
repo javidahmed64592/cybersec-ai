@@ -30,7 +30,7 @@ def scan_network() -> None:
 
     # Run nikto scan for web vulnerabilities
     logger.info("Running nikto scan...")
-    nikto_output = run_nikto(target, ["-h", target])
+    nikto_output = run_nikto(target, ["-h"])
     write_to_txt_file(nikto_output, "nikto_scan.txt", output_dir)
 
     # Run gobuster scan for directory brute-forcing
