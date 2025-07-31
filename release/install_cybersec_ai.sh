@@ -4,7 +4,7 @@ set -eu
 PACKAGE_NAME="cybersec_ai"
 WD=$(pwd)
 VENV_NAME=".venv"
-EXE_NAMES=("cybersec_ai" "scan-network")
+EXE_NAMES=("scan-network")
 CONFIG_FILE="config.json"
 LOG_FILE="cybersec_ai.log"
 UNINSTALL_FILE="uninstall_cybersec_ai.sh"

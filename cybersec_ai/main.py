@@ -4,8 +4,6 @@ import logging
 import os
 import sys
 
-import ollama
-
 from cybersec_ai.models.chatbot import Chatbot
 from cybersec_ai.tools.network import run_gobuster, run_nikto, run_nmap
 
@@ -111,15 +109,3 @@ def scan_network() -> None:
     logger.info("Network scan completed successfully.")
     logger.info("Results saved in output directory: %s", output_dir)
     logger.info("Final vulnerability report:\n%s", vulnerability_report)
-
-
-def main() -> None:
-    """Run application main entry."""
-    # Send a prompt to the model
-    print("User: What is port scanning in cybersecurity?")
-    response = ollama.chat(
-        model="gemma:2b", messages=[{"role": "user", "content": "What is port scanning in cybersecurity?"}]
-    )
-
-    # Print the model's reply
-    print("Bot:", response["message"]["content"])

@@ -127,11 +127,6 @@ jobs:
             exit 1
           fi
 
-          if [ ! -f "cybersec_ai" ]; then
-            echo "Executable 'cybersec_ai' not found"
-            exit 1
-          fi
-
           if [ ! -f "scan-network" ]; then
             echo "Executable 'scan-network' not found"
             exit 1

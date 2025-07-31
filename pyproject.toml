@@ -40,7 +40,6 @@ dev = [
 repository = "https://github.com/javidahmed64592/template-python"
 
 [project.scripts]
-cybersec_ai = "cybersec_ai.main:main"
 scan-network = "cybersec_ai.main:scan_network"
 
 [tool.pytest.ini_options]
