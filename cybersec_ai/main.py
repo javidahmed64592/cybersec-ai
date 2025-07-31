@@ -15,10 +15,11 @@ chatbot = Chatbot(model_name="gemma:2b")
 
 def scan_network() -> None:
     """Scan the network for the specified target."""
-    target = sys.argv[1]
-    if not target:
+    try:
+        target = sys.argv[1]
+    except IndexError:
         msg = "Usage: scan-network <target>"
-        raise ValueError(msg)
+        raise ValueError(msg) from None
 
     logger.info("Scanning target: %s", target)
     output_dir = get_output_dir(target)
