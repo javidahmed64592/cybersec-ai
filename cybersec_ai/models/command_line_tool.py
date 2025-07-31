@@ -1,3 +1,5 @@
+"""Command line tool decorator for executing shell commands."""
+
 import shutil
 import subprocess
 from collections.abc import Callable
