@@ -5,6 +5,7 @@ import os
 import sys
 
 from cybersec_ai.models.chatbot import Chatbot
+from cybersec_ai.models.prompt_factory import PromptFactory
 from cybersec_ai.tools.network import run_gobuster, run_nikto, run_nmap
 
 logging.basicConfig(
@@ -49,58 +50,21 @@ def scan_network() -> None:
     gobuster_output = run_gobuster(f"http://{target}", ["-w", "/usr/share/wordlists/dirb/common.txt"])
     write_to_txt_file(gobuster_output, "gobuster_scan.txt", output_dir)
 
-    prompt_port_analysis = f"""
-    You're a skilled penetration tester.
-    Based on the following nmap scan results, identify services and open ports that may be vulnerable to exploitation.
-
-    For each service:
-    - Describe the vulnerability or misconfiguration.
-    - Explain how an attacker might exploit it (e.g., tools, techniques).
-    - Recommend defensive countermeasures.
-
-    nmap Output:
-    {nmap_output}
-    """
-
-    prompt_web_app_analysis = f"""
-    You're a penetration tester specializing in web application security.
-    Analyze the scan results below and identify directories and known vulnerabilities that an attacker could target.
-
-    For each finding:
-    - Describe its significance and known CVEs (if applicable).
-    - Suggest exploitation paths (e.g., brute-forcing admin panels, parameter tampering, directory traversal).
-    - Recommend fixes or mitigations.
-
-    Nikto Output:
-    {nikto_output}
-
-    Gobuster Output:
-    {gobuster_output}
-    """
+    prompts_network_enumeration = PromptFactory.create_network_enumeration_prompt(
+        nmap_output=nmap_output, nikto_output=nikto_output, gobuster_output=gobuster_output
+    )
 
     logger.info("Querying LLM for port analysis...")
-    port_analysis = chatbot.query(prompt_port_analysis)
+    port_analysis = chatbot.query(prompts_network_enumeration["port_analysis"])
     write_to_txt_file(port_analysis, "port_analysis.txt", output_dir)
 
     logger.info("Querying LLM for web application analysis...")
-    web_app_analysis = chatbot.query(prompt_web_app_analysis)
+    web_app_analysis = chatbot.query(prompts_network_enumeration["web_app_analysis"])
     write_to_txt_file(web_app_analysis, "web_app_analysis.txt", output_dir)
 
-    prompt_vulnerability_report = f"""
-    You're preparing a penetration testing report based on recent reconnaissance and vulnerability scans.
-
-    Using the following assessments, provide a detailed vulnerability report that includes:
-    - Key exploitable vulnerabilities.
-    - Likely attack chains or entry points.
-    - Exploitation methodology: how each could be leveraged to compromise the system.
-    - Suggested remediations and security enhancements.
-
-    Port Analysis:
-    {port_analysis}
-
-    Web Application Analysis:
-    {web_app_analysis}
-    """
+    prompt_vulnerability_report = PromptFactory.create_vulnerability_report_prompt(
+        port_analysis=port_analysis, web_app_analysis=web_app_analysis
+    )
 
     logger.info("Querying LLM for vulnerability report...")
     vulnerability_report = chatbot.query(prompt_vulnerability_report)
