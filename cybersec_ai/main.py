@@ -1,4 +1,4 @@
-"""Example main module."""
+"""Main entry point for the CyberSec AI application."""
 
 import logging
 import os
