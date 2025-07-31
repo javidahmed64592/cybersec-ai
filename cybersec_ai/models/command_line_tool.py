@@ -28,9 +28,11 @@ class CommandLineTool:
                 command.extend(additional_args if isinstance(additional_args, list) else [additional_args])
 
             try:
-                result = subprocess.run(command, check=False, capture_output=True, text=True, timeout=self.timeout)  # noqa: S603
+                result = subprocess.run(command, check=True, capture_output=True, text=True, timeout=self.timeout)  # noqa: S603
             except subprocess.TimeoutExpired:
                 return f"Command '{self.command}' timed out after {self.timeout} seconds."
+            except subprocess.CalledProcessError as e:
+                return f"Command '{self.command}' failed with error: {e.stderr}"
             else:
                 return result.stdout
 
