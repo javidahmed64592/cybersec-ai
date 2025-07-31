@@ -45,9 +45,9 @@ class TestCommandLineTool:
         """Test the command not found scenario."""
         mock_shutil_which.return_value = None
 
-        with pytest.raises(FileNotFoundError, match=f"Command '{MOCK_COMMAND}' not found in PATH."):
-            mock_command_line_tool_function()
+        result = mock_command_line_tool_function()
 
+        assert result == f"Command '{MOCK_COMMAND}' not found in PATH."
         mock_subprocess_run.assert_not_called()
 
     def test_call_command_success(

@@ -19,8 +19,7 @@ class CommandLineTool:
         def wrapper(*args: list[str], **kwargs: dict[str, str]) -> str:
             """Execute the command with provided options."""
             if not shutil.which(self.command):
-                msg = f"Command '{self.command}' not found in PATH."
-                raise FileNotFoundError(msg)
+                return f"Command '{self.command}' not found in PATH."
 
             command = [self.command]
 
