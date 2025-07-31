@@ -16,7 +16,7 @@ class PromptFactory:
         - Explain how an attacker might exploit it (e.g., tools, techniques).
         - Recommend defensive countermeasures.
 
-        nmap Output:
+        Nmap Output:
         ```
         {nmap_output}
         ```
