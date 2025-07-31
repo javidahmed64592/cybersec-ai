@@ -1,4 +1,4 @@
-"""Unit tests for the example.main module."""
+"""Unit tests for the cybersec_ai.main module."""
 
 # from cybersec_ai.main import main
 
