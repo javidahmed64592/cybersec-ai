@@ -1,26 +1,19 @@
 """Main entry point for the CyberSec AI application."""
 
 import logging
-import os
 import sys
 
 from cybersec_ai.models.chatbot import Chatbot
 from cybersec_ai.models.prompt_factory import PromptFactory
 from cybersec_ai.tools.network import run_gobuster, run_nikto, run_nmap
+from cybersec_ai.utils import get_output_dir, get_root_dir, write_to_txt_file
 
 logging.basicConfig(
     format="[%(asctime)s] %(levelname)s in %(module)s: %(message)s", datefmt="%d/%m/%Y | %H:%M:%S", level=logging.INFO
 )
 logger = logging.getLogger(__name__)
+root_dir = get_root_dir()
 chatbot = Chatbot(model_name="gemma:2b")
-
-
-def write_to_txt_file(contents: str, filename: str, output_dir: str) -> None:
-    """Save the output of a command line tool to a file."""
-    os.makedirs(output_dir, exist_ok=True)
-    filepath = os.path.join(output_dir, filename)
-    with open(filepath, "w") as f:
-        f.write(contents)
 
 
 def scan_network() -> None:
@@ -30,10 +23,8 @@ def scan_network() -> None:
         msg = "Usage: scan-network <target>"
         raise ValueError(msg)
 
-    root_dir = os.getenv("CYBERSEC_AI_ROOT_DIR", ".")
-    output_dir = os.path.join(root_dir, "output", f"{target.replace('.', '_')}_scan")
-
     logger.info("Scanning target: %s", target)
+    output_dir = get_output_dir(target)
 
     # Run nmap scan with version detection and all ports
     logger.info("Running nmap scan...")
