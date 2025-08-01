@@ -117,12 +117,17 @@ jobs:
             exit 1
           fi
 
+          if [ ! -f "README.txt" ]; then
+            echo "README file not found"
+            exit 1
+          fi
+
           if [ ! -f "uninstall_cybersec_ai.sh" ]; then
             echo "Uninstallation file not found"
             exit 1
           fi
 
-          if [ ! -f "README.txt" ]; then
-            echo "README file not found"
+          if [ ! -f "scan-network" ]; then
+            echo "Executable 'scan-network' not found"
             exit 1
           fi

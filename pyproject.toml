@@ -4,9 +4,14 @@
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cybersec_ai"]
+exclude = ["tests"]
+
 [project]
 name = "cybersec-ai"
-version = "0.1.0"
+version = "0.1.1"
 description = "Ollama-powered AI assistant designed for ethical hacking workflows on Kali Linux."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -36,7 +41,7 @@ dev = [
 repository = "https://github.com/javidahmed64592/template-python"
 
 [project.scripts]
-cybersec_ai = "cybersec_ai.main:main"
+scan-network = "cybersec_ai.main:scan_network"
 
 [tool.pytest.ini_options]
 addopts = [
@@ -80,7 +85,7 @@ exclude = [
 ]
 
 extend-exclude = [
-    "src/**/__init__.py",
+    "__init__.py",
 ]
 
 [tool.ruff.lint]
