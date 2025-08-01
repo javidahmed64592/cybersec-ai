@@ -52,9 +52,9 @@ jobs:
       - name: Prepare release directory
         run: |
           PACKAGE_NAME="cybersec_ai"
-          WHEEL_FILE=$(find . -name '${PACKAGE_NAME}-*-py3-none-any.whl')
-          PACKAGE_VERSION=$(echo "$WHEEL_FILE" | sed -n 's/.*${PACKAGE_NAME}-\(.*\)-py3-none-any\.whl/\1/p')
-          mv $WHEEL_FILE "release/${WHEEL_FILE}"
+          WHEEL_FILE=$(find . -name "${PACKAGE_NAME}-*-py3-none-any.whl")
+          PACKAGE_VERSION=$(echo "$WHEEL_FILE" | sed -n "s/.*${PACKAGE_NAME}-\(.*\)-py3-none-any\.whl/\1/p")
+          mv "$WHEEL_FILE" "release/$(basename "$WHEEL_FILE")"
           chmod +x release/install_cybersec_ai.sh
 
           cp config.json release/
@@ -63,6 +63,9 @@ jobs:
           tree ${PACKAGE_NAME}_${PACKAGE_VERSION} --dirsfirst -F
       - name: Create release tarball
         run: |
+          PACKAGE_NAME="cybersec_ai"
+          WHEEL_FILE=$(find . -name "${PACKAGE_NAME}-*-py3-none-any.whl")
+          PACKAGE_VERSION=$(echo "$WHEEL_FILE" | sed -n "s/.*${PACKAGE_NAME}-\(.*\)-py3-none-any\.whl/\1/p")
           tar -czf ${PACKAGE_NAME}_${PACKAGE_VERSION}.tar.gz ${PACKAGE_NAME}_${PACKAGE_VERSION}
       - name: Upload release tarball
         uses: actions/upload-artifact@v4
@@ -93,6 +96,7 @@ jobs:
           tar -xzf $TAR_FILE
       - name: Run installer script
         run: |
+          TAR_FILE=$(find . -name 'cybersec_ai_*.tar.gz')
           DIR_NAME=$(basename "$TAR_FILE" .tar.gz)
           cd "$DIR_NAME"
           ./install_cybersec_ai.sh
